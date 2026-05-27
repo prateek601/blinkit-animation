@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -12,6 +13,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   late final Animation<Offset> _walletSlideAnim;
   late final Animation<double> _walletOpacityAnim;
+
+  late AnimationController _lottieController;
+
+  bool _showLottie = false;
 
   @override
   void initState() {
@@ -27,57 +32,78 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     ).animate(curve);
     _walletOpacityAnim = Tween<double>(begin: 0, end: 1).animate(curve);
     _controller.forward();
+
+    _lottieController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() => _showLottie = true);
+        _lottieController.forward(); // starts Lottie from frame 0
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _lottieController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          final t = Curves.easeInOut.transform(_controller.value);
-          final topColor = Color.lerp(
-            Colors.grey.shade800,
-            Colors.yellow.shade200,
-            t,
-          )!;
-          final bottomColor = Color.lerp(
-            Colors.grey.shade900,
-            Colors.grey.shade900,
-            t,
-          )!;
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              final t = Curves.easeInOut.transform(_controller.value);
+              final topColor = Color.lerp(
+                Colors.grey.shade800,
+                Colors.yellow.shade200,
+                t,
+              )!;
+              final bottomColor = Color.lerp(
+                Colors.grey.shade900,
+                Colors.grey.shade900,
+                t,
+              )!;
 
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [topColor, bottomColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: child,
-          );
-        },
-        child: Center(
-          child: FadeTransition(
-            opacity: _walletOpacityAnim,
-            child: SlideTransition(
-              position: _walletSlideAnim,
-              child: Image.asset(
-                'assets/images/wallet.png',
-                width: 120,
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [topColor, bottomColor],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                child: child,
+              );
+            },
+            child: Center(
+              child: FadeTransition(
+                opacity: _walletOpacityAnim,
+                child: SlideTransition(
+                  position: _walletSlideAnim,
+                  child: Image.asset('assets/images/wallet.png', width: 120),
+                ),
               ),
             ),
           ),
-        ),
+          if (_showLottie)
+            Lottie.asset(
+              'assets/lottie/confetti.json',
+              controller: _lottieController,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+        ],
       ),
     );
   }
