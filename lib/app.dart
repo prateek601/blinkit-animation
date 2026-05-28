@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:prateek/primary_button.dart';
 import 'package:prateek/wallet_feature_card.dart';
+import 'package:prateek/widgets/claim_gift_card.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -33,6 +35,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   late final Animation<double> _card3FadeAnim;
 
   bool _showLottie = false;
+  bool _animationCompleted = false;
 
   @override
   void initState() {
@@ -120,6 +123,15 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       if (status == AnimationStatus.completed) {
         Future.delayed(const Duration(seconds: 1), () {
           _thirdAnimationController.forward();
+        });
+      }
+    });
+    _thirdAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            _animationCompleted = true;
+          });
         });
       }
     });
@@ -242,6 +254,29 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                         title: "Real-time refunds",
                         body:
                             "No need to wait for refunds. Blinkit money refunds are instant!",
+                      ),
+                    ),
+                    AnimatedOpacity(
+                      duration: Duration(milliseconds: 200),
+                      opacity: _animationCompleted ? 1: 0,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          PrimaryButton(),
+                          const SizedBox(height: 16),
+                          ClaimGiftCard(),
+                          SizedBox(height: 30),
+                          Text(
+                            "Enjoy seamless\n one tap payments",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white24,
+                              height: 1,
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],
