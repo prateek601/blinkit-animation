@@ -16,18 +16,31 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   late AnimationController _lottieController;
 
+  late final AnimationController _walletSecondUpwardMovementController;
+  late final Animation<Offset> _walletSecondUpwardMovementAnim;
+
+  // text animation
+  late final Animation<Offset> _text1SlideAnim;
+  late final Animation<double> _text1OpacityAnim;
+  late final Animation<Offset> _text2SlideAnim;
+  late final Animation<double> _text2OpacityAnim;
+
   bool _showLottie = false;
 
   @override
   void initState() {
     super.initState();
+    _walletSecondUpwardMovementController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     final curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _walletSlideAnim = Tween<Offset>(
-      begin: const Offset(0, -0.5),
+      begin: const Offset(0, -0.6),
       end: const Offset(0, 0.2),
     ).animate(curve);
     _walletOpacityAnim = Tween<double>(begin: 0, end: 1).animate(curve);
@@ -41,14 +54,34 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       if (status == AnimationStatus.completed) {
         setState(() => _showLottie = true);
         _lottieController.forward(); // starts Lottie from frame 0
+        Future.delayed(const Duration(seconds: 1), () {
+          if (!mounted) return;
+          _walletSecondUpwardMovementController.forward();
+        });
       }
     });
+    _walletSecondUpwardMovementAnim = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: const Offset(0, -0.5),
+    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0, 0.5, curve: Curves.easeInOut)));
+
+    _text1SlideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: const Offset(0, -0.4),
+    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.5, 0.75, curve: Curves.easeInOut)));
+    _text1OpacityAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.5, 0.75, curve: Curves.easeInOut)));
+    _text2SlideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: const Offset(0, -0.43),
+    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
+    _text2OpacityAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
   }
 
   @override
   void dispose() {
     _controller.dispose();
     _lottieController.dispose();
+    _walletSecondUpwardMovementController.dispose();
     super.dispose();
   }
 
@@ -87,12 +120,35 @@ class _AppState extends State<App> with TickerProviderStateMixin {
               );
             },
             child: Center(
-              child: FadeTransition(
-                opacity: _walletOpacityAnim,
-                child: SlideTransition(
-                  position: _walletSlideAnim,
-                  child: Image.asset('assets/images/wallet.png', width: 120),
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FadeTransition(
+                    opacity: _walletOpacityAnim,
+                    child: SlideTransition(
+                      position: _walletSecondUpwardMovementAnim,
+                      child: SlideTransition(
+                        position: _walletSlideAnim,
+                        child: Image.asset('assets/images/wallet.png', width: 120),
+                      ),
+                    ),
+                  ),
+                  FadeTransition(
+                    opacity: _text1OpacityAnim,
+                    child: SlideTransition(
+                      position: _text1SlideAnim,
+                      child: Text('blinkit', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
+                  ),
+                  FadeTransition(
+                    opacity: _text2OpacityAnim,
+                    child: SlideTransition(
+                      position: _text2SlideAnim,
+                      child: Text('MONEY', style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
