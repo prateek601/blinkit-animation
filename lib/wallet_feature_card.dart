@@ -23,8 +23,14 @@ class WalletFeatureCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Image.asset(image, height: 50, width: 50),
-            const SizedBox(width: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey,
+              ),
+              child: Center(child: Image.asset(image, height: 40, width: 40)),
+            ),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: .start,
@@ -33,7 +39,7 @@ class WalletFeatureCard extends StatelessWidget {
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -42,7 +48,7 @@ class WalletFeatureCard extends StatelessWidget {
                     body,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 11,
                       fontWeight: FontWeight.w300,
                     ),
                   ),

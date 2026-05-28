@@ -169,7 +169,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             child: AlignTransition(
               alignment: _alignmentAnim,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: .center,
                   mainAxisSize: MainAxisSize.min,
@@ -182,7 +182,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           position: _walletSlideAnim,
                           child: Image.asset(
                             'assets/images/wallet.png',
-                            width: 120,
+                            width: 100,
                           ),
                         ),
                       ),
@@ -194,7 +194,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                         child: Text(
                           'blinkit',
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 36,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -208,7 +208,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                         child: Text(
                           'MONEY',
                           style: TextStyle(
-                            fontSize: 70,
+                            fontSize: 66,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -224,24 +224,24 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                             "Enjoy Seamless payments without the wait for OTPs",
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     FadeTransition(
                       opacity: _card2FadeAnim,
                       child: WalletFeatureCard(
                         image: "assets/images/wallet.png",
-                        title: "Single tap payments",
+                        title: "Zero Failures",
                         body:
-                            "Enjoy Seamless payments without the wait for OTPs",
+                            "Zero payment failures ensures you never miss an order",
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     FadeTransition(
                       opacity: _card3FadeAnim,
                       child: WalletFeatureCard(
                         image: "assets/images/wallet.png",
-                        title: "Single tap payments",
+                        title: "Real-time refunds",
                         body:
-                            "Enjoy Seamless payments without the wait for OTPs",
+                            "No need to wait for refunds. Blinkit money refunds are instant!",
                       ),
                     )
                   ],
