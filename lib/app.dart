@@ -25,11 +25,18 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   late final Animation<Offset> _text2SlideAnim;
   late final Animation<double> _text2OpacityAnim;
 
+  late final AnimationController _thirdAnimationController;
+  late final Animation<Alignment> _alignmentAnim; 
+
   bool _showLottie = false;
 
   @override
   void initState() {
     super.initState();
+    _thirdAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
     _walletSecondUpwardMovementController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -75,6 +82,25 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       end: const Offset(0, -0.43),
     ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
     _text2OpacityAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
+
+    _alignmentAnim =
+        Tween<Alignment>(
+          begin: Alignment.center,
+          end: Alignment(0, -0.7),
+        ).animate(
+          CurvedAnimation(
+            parent: _thirdAnimationController,
+            curve: Interval(0, 0.4, curve: Curves.easeInOut),
+          ),
+        );
+
+    _walletSecondUpwardMovementController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(const Duration(seconds: 1), () {
+          _thirdAnimationController.forward();
+        });
+      }
+    });
   }
 
   @override
@@ -89,7 +115,6 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        alignment: Alignment.topCenter,
         children: [
           AnimatedBuilder(
             animation: _controller,
@@ -119,10 +144,11 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                 child: child,
               );
             },
-            child: Center(
+            child: AlignTransition(
+              alignment: _alignmentAnim,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: .center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   FadeTransition(
                     opacity: _walletOpacityAnim,
