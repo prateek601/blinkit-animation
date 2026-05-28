@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:prateek/wallet_feature_card.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -27,6 +28,9 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   late final AnimationController _thirdAnimationController;
   late final Animation<Alignment> _alignmentAnim; 
+  late final Animation<double> _card1FadeAnim;
+  late final Animation<double> _card2FadeAnim;
+  late final Animation<double> _card3FadeAnim;
 
   bool _showLottie = false;
 
@@ -86,7 +90,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     _alignmentAnim =
         Tween<Alignment>(
           begin: Alignment.center,
-          end: Alignment(0, -0.7),
+          end: Alignment(0, -0.5),
         ).animate(
           CurvedAnimation(
             parent: _thirdAnimationController,
@@ -94,6 +98,24 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           ),
         );
 
+    _card1FadeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _thirdAnimationController,
+        curve: Interval(0.4, 0.6, curve: Curves.easeInOut),
+      ),
+    );
+    _card2FadeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _thirdAnimationController,
+        curve: Interval(0.6, 0.8, curve: Curves.easeInOut),
+      ),
+    );
+    _card3FadeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _thirdAnimationController,
+        curve: Interval(0.8, 1, curve: Curves.easeInOut),
+      ),
+    );
     _walletSecondUpwardMovementController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(const Duration(seconds: 1), () {
@@ -146,35 +168,84 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             },
             child: AlignTransition(
               alignment: _alignmentAnim,
-              child: Column(
-                mainAxisAlignment: .center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FadeTransition(
-                    opacity: _walletOpacityAnim,
-                    child: SlideTransition(
-                      position: _walletSecondUpwardMovementAnim,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: .center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FadeTransition(
+                      opacity: _walletOpacityAnim,
                       child: SlideTransition(
-                        position: _walletSlideAnim,
-                        child: Image.asset('assets/images/wallet.png', width: 120),
+                        position: _walletSecondUpwardMovementAnim,
+                        child: SlideTransition(
+                          position: _walletSlideAnim,
+                          child: Image.asset(
+                            'assets/images/wallet.png',
+                            width: 120,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  FadeTransition(
-                    opacity: _text1OpacityAnim,
-                    child: SlideTransition(
-                      position: _text1SlideAnim,
-                      child: Text('blinkit', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white)),
+                    FadeTransition(
+                      opacity: _text1OpacityAnim,
+                      child: SlideTransition(
+                        position: _text1SlideAnim,
+                        child: Text(
+                          'blinkit',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  FadeTransition(
-                    opacity: _text2OpacityAnim,
-                    child: SlideTransition(
-                      position: _text2SlideAnim,
-                      child: Text('MONEY', style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold, color: Colors.white)),
+                    FadeTransition(
+                      opacity: _text2OpacityAnim,
+                      child: SlideTransition(
+                        position: _text2SlideAnim,
+                        child: Text(
+                          'MONEY',
+                          style: TextStyle(
+                            fontSize: 70,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    FadeTransition(
+                      opacity: _card1FadeAnim,
+                      child: WalletFeatureCard(
+                        image: "assets/images/wallet.png",
+                        title: "Single tap payments",
+                        body:
+                            "Enjoy Seamless payments without the wait for OTPs",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    FadeTransition(
+                      opacity: _card2FadeAnim,
+                      child: WalletFeatureCard(
+                        image: "assets/images/wallet.png",
+                        title: "Single tap payments",
+                        body:
+                            "Enjoy Seamless payments without the wait for OTPs",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    FadeTransition(
+                      opacity: _card3FadeAnim,
+                      child: WalletFeatureCard(
+                        image: "assets/images/wallet.png",
+                        title: "Single tap payments",
+                        body:
+                            "Enjoy Seamless payments without the wait for OTPs",
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
