@@ -29,7 +29,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   late final Animation<double> _text2OpacityAnim;
 
   late final AnimationController _thirdAnimationController;
-  late final Animation<Alignment> _alignmentAnim; 
+  late final Animation<Alignment> _alignmentAnim;
   late final Animation<double> _card1FadeAnim;
   late final Animation<double> _card2FadeAnim;
   late final Animation<double> _card3FadeAnim;
@@ -54,7 +54,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     );
     final curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _walletSlideAnim = Tween<Offset>(
-      begin: const Offset(0, -0.6),
+      begin: const Offset(0, -0.2),
       end: const Offset(0, 0.2),
     ).animate(curve);
     _walletOpacityAnim = Tween<double>(begin: 0, end: 1).animate(curve);
@@ -74,26 +74,54 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         });
       }
     });
-    _walletSecondUpwardMovementAnim = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: const Offset(0, -0.5),
-    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0, 0.5, curve: Curves.easeInOut)));
+    _walletSecondUpwardMovementAnim =
+        Tween<Offset>(
+          begin: const Offset(0, 0.2),
+          end: const Offset(0, -0.5),
+        ).animate(
+          CurvedAnimation(
+            parent: _walletSecondUpwardMovementController,
+            curve: Interval(0, 0.5, curve: Curves.easeInOut),
+          ),
+        );
 
-    _text1SlideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.5),
-      end: const Offset(0, -0.4),
-    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.5, 0.75, curve: Curves.easeInOut)));
-    _text1OpacityAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.5, 0.75, curve: Curves.easeInOut)));
-    _text2SlideAnim = Tween<Offset>(
-      begin: const Offset(0, 0.5),
-      end: const Offset(0, -0.43),
-    ).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
-    _text2OpacityAnim = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(parent: _walletSecondUpwardMovementController, curve: Interval(0.75, 1, curve: Curves.easeInOut)));
+    _text1SlideAnim =
+        Tween<Offset>(
+          begin: const Offset(0, 0.5),
+          end: const Offset(0, -0.4),
+        ).animate(
+          CurvedAnimation(
+            parent: _walletSecondUpwardMovementController,
+            curve: Interval(0.5, 0.75, curve: Curves.easeInOut),
+          ),
+        );
+    _text1OpacityAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _walletSecondUpwardMovementController,
+        curve: Interval(0.5, 0.75, curve: Curves.easeInOut),
+      ),
+    );
+    _text2SlideAnim =
+        Tween<Offset>(
+          begin: const Offset(0, 0.5),
+          end: const Offset(0, -0.43),
+        ).animate(
+          CurvedAnimation(
+            parent: _walletSecondUpwardMovementController,
+            curve: Interval(0.75, 1, curve: Curves.easeInOut),
+          ),
+        );
+    _text2OpacityAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _walletSecondUpwardMovementController,
+        curve: Interval(0.75, 1, curve: Curves.easeInOut),
+      ),
+    );
 
     _alignmentAnim =
         Tween<Alignment>(
           begin: Alignment.center,
-          end: Alignment(0, -0.5),
+          end: Alignment(0, -0.65),
         ).animate(
           CurvedAnimation(
             parent: _thirdAnimationController,
@@ -142,6 +170,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     _controller.dispose();
     _lottieController.dispose();
     _walletSecondUpwardMovementController.dispose();
+    _thirdAnimationController.dispose();
     super.dispose();
   }
 
@@ -178,109 +207,125 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                 child: child,
               );
             },
-            child: AlignTransition(
-              alignment: _alignmentAnim,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: .center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FadeTransition(
-                      opacity: _walletOpacityAnim,
-                      child: SlideTransition(
-                        position: _walletSecondUpwardMovementAnim,
-                        child: SlideTransition(
-                          position: _walletSlideAnim,
-                          child: Image.asset(
-                            'assets/images/wallet.png',
-                            width: 100,
-                          ),
-                        ),
-                      ),
-                    ),
-                    FadeTransition(
-                      opacity: _text1OpacityAnim,
-                      child: SlideTransition(
-                        position: _text1SlideAnim,
-                        child: Text(
-                          'blinkit',
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    FadeTransition(
-                      opacity: _text2OpacityAnim,
-                      child: SlideTransition(
-                        position: _text2SlideAnim,
-                        child: Text(
-                          'MONEY',
-                          style: TextStyle(
-                            fontSize: 66,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    FadeTransition(
-                      opacity: _card1FadeAnim,
-                      child: WalletFeatureCard(
-                        image: "assets/images/wallet.png",
-                        title: "Single tap payments",
-                        body:
-                            "Enjoy Seamless payments without the wait for OTPs",
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    FadeTransition(
-                      opacity: _card2FadeAnim,
-                      child: WalletFeatureCard(
-                        image: "assets/images/wallet.png",
-                        title: "Zero Failures",
-                        body:
-                            "Zero payment failures ensures you never miss an order",
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    FadeTransition(
-                      opacity: _card3FadeAnim,
-                      child: WalletFeatureCard(
-                        image: "assets/images/wallet.png",
-                        title: "Real-time refunds",
-                        body:
-                            "No need to wait for refunds. Blinkit money refunds are instant!",
-                      ),
-                    ),
-                    AnimatedOpacity(
-                      duration: Duration(milliseconds: 200),
-                      opacity: _animationCompleted ? 1: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: AlignTransition(
+                      alignment: _alignmentAnim,
                       child: Column(
+                        mainAxisAlignment: .center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const SizedBox(height: 8),
-                          PrimaryButton(),
-                          const SizedBox(height: 16),
-                          ClaimGiftCard(),
-                          SizedBox(height: 30),
-                          Text(
-                            "Enjoy seamless\n one tap payments",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white24,
-                              height: 1,
+                          FadeTransition(
+                            opacity: _walletOpacityAnim,
+                            child: SlideTransition(
+                              position: _walletSecondUpwardMovementAnim,
+                              child: SlideTransition(
+                                position: _walletSlideAnim,
+                                child: Image.asset(
+                                  'assets/images/wallet.png',
+                                  width: 100,
+                                ),
+                              ),
+                            ),
+                          ),
+                          FadeTransition(
+                            opacity: _text1OpacityAnim,
+                            child: SlideTransition(
+                              position: _text1SlideAnim,
+                              child: Text(
+                                'blinkit',
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          FadeTransition(
+                            opacity: _text2OpacityAnim,
+                            child: SlideTransition(
+                              position: _text2SlideAnim,
+                              child: Text(
+                                'MONEY',
+                                style: TextStyle(
+                                  fontSize: 66,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FadeTransition(
+                          opacity: _card1FadeAnim,
+                          child: WalletFeatureCard(
+                            image: "assets/images/wallet.png",
+                            title: "Single tap payments",
+                            body:
+                                "Enjoy Seamless payments without the wait for OTPs",
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        FadeTransition(
+                          opacity: _card2FadeAnim,
+                          child: WalletFeatureCard(
+                            image: "assets/images/wallet.png",
+                            title: "Zero Failures",
+                            body:
+                                "Zero payment failures ensures you never miss an order",
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        FadeTransition(
+                          opacity: _card3FadeAnim,
+                          child: WalletFeatureCard(
+                            image: "assets/images/wallet.png",
+                            title: "Real-time refunds",
+                            body:
+                                "No need to wait for refunds. Blinkit money refunds are instant!",
+                          ),
+                        ),
+                        AnimatedOpacity(
+                          duration: Duration(milliseconds: 200),
+                          opacity: _animationCompleted ? 1 : 0,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 8),
+                              PrimaryButton(),
+                              const SizedBox(height: 16),
+                              ClaimGiftCard(),
+                              SizedBox(height: 30),
+                              Text(
+                                "Enjoy seamless\n one tap payments",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white24,
+                                  height: 1,
+                                ),
+                              ),
+                              const SizedBox(height: 40)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
