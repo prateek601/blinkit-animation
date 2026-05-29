@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:prateek/primary_button.dart';
-import 'package:prateek/wallet_feature_card.dart';
+import 'package:prateek/widgets/primary_button.dart';
+import 'package:prateek/widgets/wallet_feature_card.dart';
 import 'package:prateek/widgets/claim_gift_card.dart';
 import 'package:prateek/widgets/custom_icon_button.dart';
 
@@ -326,7 +326,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           child: Column(
                             children: [
                               const SizedBox(height: 8),
-                              PrimaryButton(),
+                              PrimaryButton(title: "Add Money"),
                               const SizedBox(height: 16),
                               ClaimGiftCard(),
                               SizedBox(height: 30),

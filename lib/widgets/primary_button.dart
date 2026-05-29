@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({super.key});
+  final void Function()? onTap;
+  final String title;
+  const PrimaryButton({super.key, this.onTap, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onTap,
       style: ButtonStyle(
         textStyle: WidgetStateTextStyle.resolveWith(
           (_) => TextStyle(fontSize: 16),
@@ -20,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
-      child: Text("Add Money", style: TextStyle(fontWeight: FontWeight.w700)),
+      child: Text(title, style: TextStyle(fontWeight: FontWeight.w700)),
     );
   }
 }
