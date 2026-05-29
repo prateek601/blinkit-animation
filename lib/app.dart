@@ -13,7 +13,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> with TickerProviderStateMixin {
-  late final AnimationController _controller;
+  late final AnimationController _walletFirstDownMovementController;
 
   late final Animation<Offset> _walletSlideAnim;
   late final Animation<double> _walletOpacityAnim;
@@ -50,23 +50,23 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    _controller = AnimationController(
+    _walletFirstDownMovementController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    final curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    final curve = CurvedAnimation(parent: _walletFirstDownMovementController, curve: Curves.easeInOut);
     _walletSlideAnim = Tween<Offset>(
       begin: const Offset(0, -0.2),
       end: const Offset(0, 0.2),
     ).animate(curve);
     _walletOpacityAnim = Tween<double>(begin: 0, end: 1).animate(curve);
-    _controller.forward();
+    _walletFirstDownMovementController.forward();
 
     _lottieController = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    _controller.addStatusListener((status) {
+    _walletFirstDownMovementController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() => _showLottie = true);
         _lottieController.forward(); // starts Lottie from frame 0
@@ -175,7 +175,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _walletFirstDownMovementController.dispose();
     _lottieController.dispose();
     _walletSecondUpwardMovementController.dispose();
     _thirdAnimationController.dispose();
