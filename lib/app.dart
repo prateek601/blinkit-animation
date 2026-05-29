@@ -179,29 +179,24 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              final t = Curves.easeInOut.transform(_controller.value);
-              final topColor = Color.lerp(
-                Colors.grey.shade800,
-                Colors.yellow.shade200,
-                t,
-              )!;
-              final bottomColor = Color.lerp(
-                Colors.grey.shade900,
-                Colors.grey.shade900,
-                t,
-              )!;
-
+          TweenAnimationBuilder(
+            tween: Tween(begin: 0.0, end: _animationCompleted ? 1.0 : 0.0),
+            duration: const Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+            builder: (context, value, child) {
               return Container(
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [topColor, bottomColor],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    colors: [
+                      Color.lerp(Color(0xFF3D3500), Color(0xFF2E2A1A), value)!,
+                      Color.lerp(Color(0xFF1A1500), Color(0xFF1A1814), value)!,
+                      Color.lerp(Color(0xFF000000), Color(0xFF0D0D0D), value)!,
+                    ],
+                    stops: [0.0, 0.4, 1.0],
                   ),
                 ),
                 child: child,
