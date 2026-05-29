@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:prateek/primary_button.dart';
 import 'package:prateek/wallet_feature_card.dart';
 import 'package:prateek/widgets/claim_gift_card.dart';
+import 'package:prateek/widgets/custom_icon_button.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -33,6 +34,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   late final Animation<double> _card1FadeAnim;
   late final Animation<double> _card2FadeAnim;
   late final Animation<double> _card3FadeAnim;
+  late final Animation<double> _settingsIconFadeAnim;
 
   bool _showLottie = false;
   bool _animationCompleted = false;
@@ -41,7 +43,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _thirdAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 1800),
       vsync: this,
     );
     _walletSecondUpwardMovementController = AnimationController(
@@ -125,26 +127,32 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         ).animate(
           CurvedAnimation(
             parent: _thirdAnimationController,
-            curve: Interval(0, 0.4, curve: Curves.easeInOut),
+            curve: Interval(0, 0.5, curve: Curves.easeInOut),
           ),
         );
 
     _card1FadeAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _thirdAnimationController,
-        curve: Interval(0.4, 0.6, curve: Curves.easeInOut),
+        curve: Interval(0.3, 0.5, curve: Curves.easeInOut),
       ),
     );
     _card2FadeAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _thirdAnimationController,
-        curve: Interval(0.6, 0.8, curve: Curves.easeInOut),
+        curve: Interval(0.5, 0.7, curve: Curves.easeInOut),
       ),
     );
     _card3FadeAnim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _thirdAnimationController,
-        curve: Interval(0.8, 1, curve: Curves.easeInOut),
+        curve: Interval(0.7, 0.9, curve: Curves.easeInOut),
+      ),
+    );
+    _settingsIconFadeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _thirdAnimationController,
+        curve: Interval(0.9, 1, curve: Curves.easeInOut),
       ),
     );
     _walletSecondUpwardMovementController.addStatusListener((status) {
@@ -206,6 +214,25 @@ class _AppState extends State<App> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(16.0),
               child: Stack(
                 children: [
+                  Positioned(
+                    top: 30,
+                    right: 0,
+                    left: 0,
+                    child: Expanded(
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          CustomIconButton(
+                            icon: Icons.keyboard_arrow_left_rounded,
+                          ),
+                          FadeTransition(
+                            opacity: _settingsIconFadeAnim,
+                            child: CustomIconButton(icon: Icons.settings),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: AlignTransition(
