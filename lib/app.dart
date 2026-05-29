@@ -181,7 +181,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         children: [
           TweenAnimationBuilder(
             tween: Tween(begin: 0.0, end: _animationCompleted ? 1.0 : 0.0),
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 100),
             curve: Curves.easeInOut,
             builder: (context, value, child) {
               return Container(
